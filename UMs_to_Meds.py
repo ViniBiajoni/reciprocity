@@ -5,8 +5,30 @@ from crit_UMs import dfs
 from printData import printCkUMs
 import numpy as np
 from itertools import combinations
+from crit_meds import meas_criticalities
 import itertools
+import scipy
 
+
+
+def avaliar_candidato(meas_envolved,E):
+   
+    n_meas = len(list(meas_envolved))
+    E_aux = np.zeros((n_meas,n_meas))
+    for i in range(n_meas):
+        E_aux[i,i] = E[meas_envolved[i],meas_envolved[i]]
+        for j in range(i+1,n_meas):
+            E_aux[i,j] = E[meas_envolved[i],meas_envolved[j]]
+            E_aux[j,i] = E_aux[i,j]
+
+    P, L, U = scipy.linalg.lu(E_aux)
+
+    is_crit = False
+
+    if min(abs(np.diag(U))) < 1e-10:
+        is_crit = True
+    
+    return is_crit
 
 def obter_dicionario_listas(kmax):
     keys = list(range(kmax))
@@ -18,28 +40,22 @@ def obter_dicionario_listas(kmax):
 def gera_combinacoes_cardinalidade_cruzada(kmax, medidas_UMs, E):
     medidas_combnts = obter_dicionario_listas(kmax)
     #Todo - Implementar
-    for i in range(kmax):
-        lista_meds = medidas_UMs[i]
-        for k in range(i, len(lista_meds)+1):
-            for subset in combinations(lista_meds, k):
-                medidas_combnts[k].append(set(subset))
     
 
 #Gera combinacoes de mesma cardinalidade
 def gera_combinacoes_mesma_cardinalidade(kmax, medidas_UMs, E): 
     medidas_combnts = obter_dicionario_listas(kmax)
 
-    for i in range(kmax):
+    for i in range(kmax): #(kmin com ck, kmax)
         lista_meds = medidas_UMs[i]
         kmax_meds = len(lista_meds) if (len(lista_meds) <= kmax + 1) else 5
         for k in range(i+1, kmax_meds + 1):
             for subset in itertools.combinations(lista_meds, k):
                 medidas_combnts[i].append(set(subset))
     
-    print('teste')
+    
 
-
-def recupera_ck_meds(kmax, num_cks, solution_list, dict_UMs_meds, E):
+def recuperar_ck_meds(kmax, num_cks, solution_list, dict_UMs_meds, E): #saida esperada -> Dicionario por cadinalidade com cks (Identico ao das UMs)
     #Monta dicionario de Medidas envolvidas (por cardinalidade)
     medidas_UMs = obter_dicionario_listas(kmax)
 
@@ -87,9 +103,35 @@ if __name__ == "__main__":
     solution_list, num_cks = dfs(E,num_meds,kmax,num_bus,UMs,dict_UMs_meds)
     printCkUMs(num_bus, num_meds, kmax, num_cks, solution_list)
 
-    ck_meds_recuperadas = recupera_ck_meds(kmax, num_cks, solution_list, dict_UMs_meds, E)
-    print("Finished")
-##########################################Pós-processo análise Ck-meds######################################## 
+    # Recuperar
+    dicionario_ck_meds_recuperadas = recuperar_ck_meds(kmax, num_cks, solution_list, dict_UMs_meds, E)
+
+    # dicionario_ck_meds_recuperadas1 = recuperar_ck_meds_combinacao_interna(kmax, num_cks, solution_list, dict_UMs_meds, E)
+    # dicionario_ck_meds_recuperadas2 = recuperar_ck_meds_combinacao_cruzada(kmax, num_cks, solution_list, dict_UMs_meds, E)
+
+
+
+    #Filtrar
+        #Todo - Implementar Método de filtragem
+            # Percorrer o dionario de cks e remover aquelas que estão contidas em alguma de cardinalidade superior (Cj c Ck onde j<k)
+
+
+
+    # Obtem criticalidades medidas via BF
+    number_of_cks_meds, dicionario_ckMeds, _ = meas_criticalities(E,num_meds,kmax,num_bus,0,dict_meds)
+    
+    
+    ##########################################Pós-processo análise Ck-meds######################################## 
+    
+    #Compara as criticalidades recuperadas via heurística com as completas
+        #Todo - Implementar metodo compararativo
+
+    
+    
+    #Printar as cks recuperadas por cardinalidade
+    
+    
+
 
 
     
