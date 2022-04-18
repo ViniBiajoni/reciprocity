@@ -39,7 +39,21 @@ def obter_dicionario_listas(kmax):
 #Gerar combinacoes de cardinalidades cruzadas
 def gera_combinacoes_cardinalidade_cruzada(kmax, medidas_UMs, E):
     medidas_combnts = obter_dicionario_listas(kmax)
-    #Todo - Implementar
+    for i in range(kmax - 1):
+        lista_meds =  list(medidas_UMs[i])
+        lista_meds2 = list(medidas_UMs[i+1]) 
+        lista_completa = lista_meds + lista_meds2
+        kmax_meds = len(medidas_UMs) if (len(medidas_UMs) <= kmax + 1) else 5
+        for subset in itertools.combinations(lista_meds, i+1):           
+                is_crit = avaliar_candidato(subset, E)
+                if is_crit == True: 
+                    medidas_combnts[i].append(set(subset))
+        for k in range(i+2, kmax_meds+1):
+            for subset in itertools.combinations(lista_completa, k):           
+                is_crit = avaliar_candidato(subset, E)
+                if is_crit == True: 
+                    medidas_combnts[k-1].append(set(subset))
+    return medidas_combnts 
     
 
 #Gera combinacoes de mesma cardinalidade
@@ -66,7 +80,8 @@ def recuperar_ck_meds(kmax, num_cks, solution_list, dict_UMs_meds, E): #saida es
             for i in range(k+1):
                 medidas_UMs[k].append(dict_UMs_meds[f'{ckUM[i]}'])
         medidas_UMs[k] = list(set(itertools.chain.from_iterable(medidas_UMs[k])))
-    combinacoes_medidas_k = gera_combinacoes_mesma_cardinalidade(kmax, medidas_UMs, E)
+    #combinacoes_medidas_k = gera_combinacoes_mesma_cardinalidade(kmax, medidas_UMs, E)
+    combinacoes_medidas_k = gera_combinacoes_cardinalidade_cruzada(kmax, medidas_UMs, E)
     return combinacoes_medidas_k
 
 if __name__ == "__main__":
