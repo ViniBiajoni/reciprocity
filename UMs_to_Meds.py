@@ -41,13 +41,14 @@ def gera_combinacoes_cardinalidade_cruzada(kmax, medidas_UMs, E):
     medidas_combnts = obter_dicionario_listas(kmax)
     for i in range(kmax - 1):
         lista_meds =  list(medidas_UMs[i])
-        lista_meds2 = list(medidas_UMs[i+1]) 
-        lista_completa = lista_meds + lista_meds2
-        kmax_meds = len(medidas_UMs) if (len(medidas_UMs) <= kmax + 1) else 5
-        for subset in itertools.combinations(lista_meds, i+1):           
+        if i ==0:
+            for subset in itertools.combinations(lista_meds, 1):           
                 is_crit = avaliar_candidato(subset, E)
                 if is_crit == True: 
-                    medidas_combnts[i].append(set(subset))
+                    medidas_combnts[0].append(set(subset))
+        lista_meds2 = list(medidas_UMs[i+1]) 
+        lista_completa = set(lista_meds + lista_meds2)
+        kmax_meds = len(medidas_UMs) if (len(medidas_UMs) <= kmax + 1) else 5
         for k in range(i+2, kmax_meds+1):
             for subset in itertools.combinations(lista_completa, k):           
                 is_crit = avaliar_candidato(subset, E)
@@ -80,9 +81,19 @@ def recuperar_ck_meds(kmax, num_cks, solution_list, dict_UMs_meds, E): #saida es
             for i in range(k+1):
                 medidas_UMs[k].append(dict_UMs_meds[f'{ckUM[i]}'])
         medidas_UMs[k] = list(set(itertools.chain.from_iterable(medidas_UMs[k])))
-    #combinacoes_medidas_k = gera_combinacoes_mesma_cardinalidade(kmax, medidas_UMs, E)
-    combinacoes_medidas_k = gera_combinacoes_cardinalidade_cruzada(kmax, medidas_UMs, E)
+    combinacoes_medidas_k = gera_combinacoes_mesma_cardinalidade(kmax, medidas_UMs, E)
+    #combinacoes_medidas_k = gera_combinacoes_cardinalidade_cruzada(kmax, medidas_UMs, E)
     return combinacoes_medidas_k
+
+def filtra_ck_meds(kmax, dct_ck_med):
+    for i in range(len(dct_ck_med)-1):
+        for ckmed in dct_ck_med[i]:
+            for k in range (i+1, len(dct_ck_med)):
+                aux_list = list(dct_ck_med[k])
+                for ckmed2 in aux_list:
+                    if set(ckmed).issubset(set(ckmed2)):
+                        dct_ck_med[k].remove(ckmed2)
+    return dct_ck_med
 
 if __name__ == "__main__":
     
@@ -130,6 +141,7 @@ if __name__ == "__main__":
     #Filtrar
         #Todo - Implementar Método de filtragem
             # Percorrer o dionario de cks e remover aquelas que estão contidas em alguma de cardinalidade superior (Cj c Ck onde j<k)
+    filtra_ck_meds(kmax, dicionario_ck_meds_recuperadas)
 
 
 
@@ -141,6 +153,7 @@ if __name__ == "__main__":
     
     #Compara as criticalidades recuperadas via heurística com as completas
         #Todo - Implementar metodo compararativo
+
 
     teste = True
     
