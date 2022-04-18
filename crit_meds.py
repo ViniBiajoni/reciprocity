@@ -112,15 +112,15 @@ def main():
     # caso = 'ieee14_handling_case1'
 
     #24 Barras
-    # med_file= os.path.join(THIS_FOLDER,'24BusUM10eUM15.med')
-    # caso = '24BusUM10eUM15'
+    med_file= os.path.join(THIS_FOLDER,'24BusUM10eUM15.med')
+    caso = '24BusUM10eUM15'
 
 
     #30 Bus
-    med_file= os.path.join(THIS_FOLDER,'ieee30_observability_PSCC_2014B_43.med')
+    #med_file= os.path.join(THIS_FOLDER,'ieee30_observability_PSCC_2014B_43.med')
     # med_file= os.path.join(THIS_FOLDER,'medicao\med30b81m_red_min06.txt')
     # med_file= os.path.join(THIS_FOLDER,'medicao\med30b105m_red_min09.txt')
-    caso = 'ieee30_observability_PSCC_2014B_43'
+    #caso = 'ieee30_observability_PSCC_2014B_43'
     # caso = 'ieee30_81med'
     # caso = 'ieee30_105med'
 
@@ -139,9 +139,9 @@ def main():
     #Leitura Sistema
     #net_file= os.path.join(THIS_FOLDER,'sistemas\paper6Bus_case2.txt')
     # net_file= os.path.join(THIS_FOLDER,'sistemas\ieee14.txt')
-    # net_file= os.path.join(THIS_FOLDER,'sistemas\ieee24.txt')
-    net_file= os.path.join(THIS_FOLDER,'sistemas\ieee30.txt')
-    # net_file= os.path.join(THIS_FOLDER,'sistemas\ieee118.txt')
+    net_file= os.path.join(THIS_FOLDER,'sistemas\ieee24.txt')
+    # net_file= os.path.join(THIS_FOLDER,'sistemas\ieee30.txt')
+    # net_file= os.path.join(THIS_FOLDER,'sistemas\ieee118.txt')24
     net = np.loadtxt(net_file)
 
     #Monta H e esturura de relacoes entre medidas e UMs
