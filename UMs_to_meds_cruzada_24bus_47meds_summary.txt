@@ -1,0 +1,21 @@
+=====Measurements Criticality Analysis From Measurement Units Analysis - Summary=====
+kmax_UM = 3
+kmax_med = 3
+
+ 
+======================================c1-Tuples======================================
+num ck-tuples = 1
+
+num recovered ck-tuples = 1
+
+======================================c2-Tuples======================================
+num ck-tuples = 2
+
+num recovered ck-tuples = 2
+
+======================================c3-Tuples======================================
+num ck-tuples = 10
+
+num recovered ck-tuples = 10
+
+====================================ck-Tuples Missing====================================
