@@ -150,7 +150,7 @@ def main():
     #Monta G e E
     G =  np.transpose(H)@H
     E = np.identity(num_meds) - H@(np.linalg.inv(G))@np.transpose(H)
-    kmax=3
+    kmax=4
     type_exec = 0 # 0 is a complete sim and 1 is a simplified
     tic= timeit.default_timer()
     number_of_cks_meds, sol_list_med_number, sol_list_med_str = meas_criticalities(E,num_meds,kmax,num_bus,type_exec,dict_meds)
